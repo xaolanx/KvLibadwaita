@@ -86,7 +86,8 @@ checkListOfEnum "${pname}: theme name"
       patchShebangs kvctl.sh
 
       substituteInPlace kvctl.sh \
-        --replace '$HOME/.config/Kvantum' $out/share/Kvantum
+        --replace-warn '$HOME/.config/Kvantum' "$out/share/Kvantum" \
+        --replace-warn 'python3' "${python3}/bin/python3"
     '';
 
     installPhase = ''
