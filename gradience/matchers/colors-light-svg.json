@@ -9,15 +9,15 @@
         "chanel": "lightness",
         "value": 0
     },
-    "#fafafa": {
+    "#fafafb": {
         "ref": "base00",
         "chanel": "lightness",
-        "value": 0
+        "value": 1
     },
-    "#ebebeb": {
+    "#ebebed": {
         "ref": "base02",
         "chanel": "lightness",
-        "value": 0
+        "value": 1
     },
     "#e6e6e6": {
         "ref": "base02",
@@ -75,6 +75,11 @@
         "value": 0
     },
     "#333333": {
+        "ref": "base07",
+        "chanel": "lightness",
+        "value": 0
+    },
+    "#000006": {
         "ref": "base07",
         "chanel": "lightness",
         "value": 0
