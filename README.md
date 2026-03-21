@@ -34,7 +34,9 @@ It will help if you use a specific color scheme throughout the system.
 Works similar to the utility of the same name [Gradience](https://gradienceteam.github.io/)
 
 Under the hood, standard color schemes are used [base16](https://github.com/chriskempson/base16)
-Depending on the specified theme during the building, the KvLibadwaita colors are compared and subsequently replaced.
+Depending on the specified theme during the building,
+the KvLibadwaita colors are compared and subsequently replaced.
+
 The final version will be available in the `gradience/result` directory
 
 Contains 35 popular theme presets
@@ -44,12 +46,12 @@ Contains 35 popular theme presets
 - ayu_dark
 - ayu_light
 - bearded_arc
-- blossom_light 
+- blossom_light
 - catppuccin_frappe
 - catppuccin_latte
 - catppuccin_macchiato
 - catppuccin_mocha
-- decay 
+- decay
 - dracula
 - everblush
 - everforest_dark
@@ -67,10 +69,10 @@ Contains 35 popular theme presets
 - onelight
 - rosepine
 - rosepine_dawn
-- rosepine_moon 
+- rosepine_moon
 - solarized
 - sweetpastel
-- rxyhn  
+- rxyhn
 - tokyodark
 - tokyonight
 - yoru
@@ -115,24 +117,24 @@ the color matches manually in the `gradience/matchers` files
 To install, use the script `kvctl.sh` in the root of the repository
 
 ```console
-Usage: ./kvctl.sh [options]                                      
+Usage: ./kvctl.sh [options]
 
-Options:                                                        
-  
- --no-ask    | -na  don't ask for confirmation                  
- --build     | -b   {theme_name}                                
- --install   | -i   {theme_name}                                
- --uninstall | -u   uninstall theme                             
- --version   | -v   print version                               
- --help      | -h   print this message and exit                 
- 
-Examples:                                                       
-   
-./kvctl.sh --build nord    the nord theme will be built into gradience/result       
-./kvctl.sh --install       the default theme will be installed   
-./kvctl.sh --install nord  the nord theme will be installed      
-./kvctl.sh --install custom ~/my-base16.json                     
-./kvctl.sh --uninstall     current theme will be uninstalled 
+Options:
+
+ --no-ask    | -na  don't ask for confirmation
+ --build     | -b   {theme_name}
+ --install   | -i   {theme_name}
+ --uninstall | -u   uninstall theme
+ --version   | -v   print version
+ --help      | -h   print this message and exit
+
+Examples:
+
+./kvctl.sh --build nord    the nord theme will be built into gradience/result
+./kvctl.sh --install       the default theme will be installed
+./kvctl.sh --install nord  the nord theme will be installed
+./kvctl.sh --install custom ~/my-base16.json
+./kvctl.sh --uninstall     current theme will be uninstalled
 ```
 
 ## Installation gradience theme (For Nix users)
@@ -155,11 +157,12 @@ containing your NixOS configuration:
     };
     # ...
     kvlibadwaita = {
-    url = "github:GabePoel/KvLibadwaita";  # or replace to fork owner
-    inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:GabePoel/KvLibadwaita";  # or replace to fork owner
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # ...
   };
+```
 
 This flake provides an overlay for Nixpkgs, with package and a home-manager module.
 
@@ -170,13 +173,13 @@ They are respectively found in the flake as
 - `inputs.kvlibadwaita.packages.${system}.default`
 - `inputs.kvlibadwaita.packages.${system}.kvlibadwaita`
 - `inputs.kvlibadwaita.homeManagerModule`
-  
+
 (Where `${system}` is either `x86_64-linux` `aarch64-linux` `x86_64-darwin` `aarch64-darwin`)
 
 Output data can be added in different ways.
 
-Use the one you are familiar with, the main thing is 
-to make `inputs` available inside the home-manager configuration 
+Use the one you are familiar with, the main thing is
+to make `inputs` available inside the home-manager configuration
 or pass the package to the `nixpkgs` overlay
 
 In the example below, the home manager is installed as a NixOS module
@@ -186,22 +189,25 @@ In the example below, the home manager is installed as a NixOS module
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
-      pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-      extraSpecialArgs = { inherit system; inherit inputs; };  # <- passing inputs to the attribute set for home-manager
-      specialArgs = { inherit system; inherit inputs; };       # <- passing inputs to the attribute set for NixOS (optional)
+      pkgs = import nixpkgs { inherit system; };
+      extraSpecialArgs = { inherit system inputs; };  # <- passing inputs to the attribute set for home-manager
+      specialArgs = { inherit system inputs; };       # <- passing inputs to the attribute set for NixOS (optional)
     in {
     nixosConfigurations = {
-      laptop = lib.nixosSystem {  # <- your device name
+      dummy = lib.nixosSystem {  # <- your device name
         modules = [
-          inherit specialArgs;           # <- this will make inputs available anywhere in the NixOS configuration
-          ./hosts/laptop/configuration.nix
-          {  # <- # example to add the overlay to Nixpkgs:
+          inherit specialArgs;   # <- this will make inputs available anywhere in the NixOS configuration
+          ./hosts/dummy/configuration.nix
+
+          # example to add the overlay to Nixpkgs:
+          {
             nixpkgs = {
               overlays = [
                 inputs.kvlibadwaita.overlays.default
               ];
             };
           }
+
           home-manager.nixosModules.home-manager {
             home-manager = {
               inherit extraSpecialArgs;  # <- this will make inputs available anywhere in the HM configuration
