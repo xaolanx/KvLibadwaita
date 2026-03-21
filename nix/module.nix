@@ -8,8 +8,14 @@
     theme = cfg.theme;
     base16-scheme-path = cfg.base16-scheme-path;
   };
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    optionalAttrs
+    types
+    ;
   in {
-  options.qt.kvlibadwaita = with lib; {
+  options.qt.kvlibadwaita = {
     enable = mkEnableOption "Enable KvLibadwaita";
     theme = mkOption {
       type = types.str;
@@ -19,7 +25,7 @@
         If the value is missing or equal to adwaita,
         the default theme will be installed
         If the value is custom, the builder expects
-        the base16-scheme-path option; 
+        the base16-scheme-path option;
         if it is not specified, the catppuccin_mocha theme will be built.
       '';
     };
@@ -43,22 +49,21 @@
       '';
     };
   };
-  config = with pkgs; with lib; mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     home.packages = [
-      libsForQt5.qtstyleplugin-kvantum
-      qt6Packages.qtstyleplugin-kvantum
+      pkgs.libsForQt5.qtstyleplugin-kvantum
+      pkgs.qt6Packages.qtstyleplugin-kvantum
       kvlibadwaita
     ];
-    xdg.configFile = {
-      "Kvantum/KvLibadwaita".source = "${kvlibadwaita}/share/Kvantum/KvLibadwaita";
-    } // (
-      if cfg.auto then {
+    xdg.configFile =
+      {
+        "Kvantum/KvLibadwaita".source = "${kvlibadwaita}/share/Kvantum/KvLibadwaita";
+      }
+      // optionalAttrs cfg.auto {
         "Kvantum/kvantum.kvconfig".text = ''
           [General]
           theme=KvLibadwaita
         '';
-      } 
-      else {}
-    );
+      };
   };
 }
