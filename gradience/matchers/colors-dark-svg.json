@@ -1,28 +1,28 @@
 {
-    "#1e1e1e": {
-        "ref": "base00",
-        "chanel": "lightness",
-        "value": 0
-    },
     "#212121": {
         "ref": "base00",
         "chanel": "lightness",
         "value": 1
-    },
-    "#242424": {
-        "ref": "base00",
-        "chanel": "lightness",
-        "value": 2
     },
     "#2c2c2c": {
         "ref": "base00",
         "chanel": "lightness",
         "value": 3
     },
-    "#303030": {
-        "ref": "base01",
+    "#1d1d20": {
+        "ref": "base00",
         "chanel": "lightness",
         "value": 0
+    },
+    "#222226": {
+        "ref": "base00",
+        "chanel": "lightness",
+        "value": 2
+    },
+    "#2e2e32": {
+        "ref": "base00",
+        "chanel": "lightness",
+        "value": 4
     },
     "#3d3d3d": {
         "ref": "base01",
@@ -167,6 +167,11 @@
     },
     "#b74aff": {
         "ref": "base0E",
+        "chanel": "lightness",
+        "value": 0
+    },
+    "#000006": {
+        "ref": "base07",
         "chanel": "lightness",
         "value": 0
     }

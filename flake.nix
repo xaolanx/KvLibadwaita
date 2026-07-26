@@ -13,28 +13,32 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs }: let
-    supportedSystems = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-    ];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-    nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
-in {
-  # Executed by `nix build .#<name>`
-  packages = forAllSystems (system: let
-      pkgs = nixpkgsFor.${system};
-  in rec {
-    kvlibadwaita = pkgs.callPackage ./nix/kvlibadwaita.nix {};
-    default = kvlibadwaita;
-  });
-  overlays = (import ./nix/overlays.nix { })
-  // { default = self.overlays.kvlibadwaita ; };
-  homeManagerModules.kvlibadwaita = import ./nix/module.nix;
-  homeManagerModule = self.homeManagerModules.kvlibadwaita;
-  };
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
+      {
+        packages = rec {
+          kvlibadwaita = pkgs.callPackage ./nix/kvlibadwaita.nix { };
+          default = kvlibadwaita;
+        };
+      }
+    )
+    // {
+      overlays = (import ./nix/overlays.nix { }) // {
+        default = self.overlays.kvlibadwaita;
+      };
+      homeManagerModules.kvlibadwaita = import ./nix/module.nix;
+      homeManagerModule = self.homeManagerModules.kvlibadwaita;
+    };
 }
